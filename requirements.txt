@@ -63,7 +63,7 @@ ftfy==6.1.1
 future-fstrings==1.2.0
 ghp-import==2.1.0
 gitdb==4.0.10
-GitPython==3.1.31
+GitPython==3.1.41
 google-api-core==2.12.0
 google-api-python-client==2.103.0
 google-auth==2.23.3
