@@ -7,6 +7,7 @@ Coming in under gravity.
 Not firing the engines once in contact with the ground.
 v5.2: added horizontal alignment reward - didn't help. Made slightly worse.
 '''
+
 class LunarLanderCustomReward(gym.Wrapper):
     def __init__(self, env):
         super().__init__(env)
@@ -27,14 +28,22 @@ class LunarLanderCustomReward(gym.Wrapper):
         GROUND_ENGINE_USE_PENALTY = -0.4
         MAIN_ENGINE_USE_PENALTY = -0.6
         SIDE_ENGINE_USE_PENALTY = -0.06
-        EFFICIENT_DESCENT_REWARD = 0.2
-        EFFICIENT_DESCENT_MAX_REWARD = 3
-        ANGLE_THRESHOLD = 0.1  # Smaller values mean stricter control
+        EFFICIENT_DESCENT_REWARD = 0.4
+
+        '''
+        ANGLE_THRESHOLD = 0.1  # Adjust as needed, smaller values mean stricter control
         HORIZONTAL_ALIGNMENT_REWARD = 0.1
         ANGLE_PENALTY = -0.1  # Adjust as needed
 
         # Reward keeping the craft horizontal
         lander_angle = state[ANGLE]
+
+        if abs(lander_angle) < ANGLE_THRESHOLD:
+            reward += HORIZONTAL_ALIGNMENT_REWARD
+        else:
+            # Apply penalty based on how much the angle deviates from horizontal
+            reward += ANGLE_PENALTY * abs(lander_angle)
+        '''
 
         # Check if either leg is in contact with the ground
         ground_contact = (state[LEFT_LEG_GROUND_CONTACT] or

@@ -4,8 +4,6 @@ from lunar_lander_learning import LunarLanderLearning
 For observation space and reward details, see
 https://gymnasium.farama.org/environments/box2d/lunar_lander/
 
-TODO: Factor out common code between trainer and evaluator.
-TODO: Factor into class structure
 Notes on hyper parameters and approach:
 
 Shifting from DQN to PPO definitely helped.
@@ -73,8 +71,8 @@ GAE_LAMBDA = 0.95
 '''
 The number of interactions with the environment before the policy is updated.
 '''
-
-INTERACTIONS_PER_POLICY_UPDATE = 1024
+# 18/1 18:23
+INTERACTIONS_PER_POLICY_UPDATE = 1200
 
 '''
 Interations with the environment are built into experiences which are batched.

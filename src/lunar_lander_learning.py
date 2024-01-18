@@ -55,6 +55,7 @@ class LunarLanderLearning:
                                     n_envs=self.PARALLEL_ENVIRONMENTS,
                                     wrapper_class=LunarLanderCustomReward)
 
+        # Leave learning rate to the default-- for now.
         self.model = PPO(   policy='MlpPolicy',
                             env=wrapped_env,
                             n_steps=self.interactions_per_policy_update,
