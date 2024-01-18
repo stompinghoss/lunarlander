@@ -1,4 +1,5 @@
 .venv/
 logs/
 src/__pycache__/
+.DS_store
 
