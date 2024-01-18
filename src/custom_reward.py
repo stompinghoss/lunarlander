@@ -8,6 +8,7 @@ Not firing the engines once in contact with the ground.
 v5.2: added horizontal alignment reward - didn't help. Made slightly worse.
 '''
 
+
 class LunarLanderCustomReward(gym.Wrapper):
     def __init__(self, env):
         super().__init__(env)
@@ -22,7 +23,7 @@ class LunarLanderCustomReward(gym.Wrapper):
         MAIN_ENGINE = 2
         LEFT_ENGINE = 1
         RIGHT_ENGINE = 3
-        ANGLE = 4
+        # ANGLE = 4
 
         # Engine use penalty when on ground
         GROUND_ENGINE_USE_PENALTY = -0.4

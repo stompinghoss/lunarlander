@@ -10,13 +10,11 @@ PROBLEM_NAME = "LunarLander-v2"
 EVAL_EPISODES = 10
 EVAL_ENV_INTERACTION_STEPS = 100000
 
+
 # Function to load the model
 def load_model():
-    # Ask the user for the model number
-    model_number = input("Enter the model number (e.g., 'v5.0' for version 5.0): ")
-
     # Construct the model path
-    model_path = f"./good/v{model_number}/ppo_lunarlander_v{model_number}"
+    model_path = "ppo_lunarlander"
 
     # Load the model
     try:

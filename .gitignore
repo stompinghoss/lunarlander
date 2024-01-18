@@ -1,5 +1,4 @@
 .venv/
 logs/
-src/__pycache__/auto_tune.cpython-310.pyc
-src/__pycache__/custom_reward.cpython-310.pyc
-src/__pycache__/lunar_lander_learning.cpython-310.pyc
+src/__pycache__/
+

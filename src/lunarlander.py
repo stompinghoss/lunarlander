@@ -1,9 +1,6 @@
 from lunar_lander_learning import LunarLanderLearning
 
 '''
-For observation space and reward details, see
-https://gymnasium.farama.org/environments/box2d/lunar_lander/
-
 Notes on hyper parameters and approach:
 
 Shifting from DQN to PPO definitely helped.
