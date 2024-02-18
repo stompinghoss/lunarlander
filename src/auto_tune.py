@@ -27,6 +27,7 @@ class Tuning:
         lr = trial.suggest_loguniform('lr', 1e-4, 1e-2)
         gamma = trial.suggest_categorical('gamma', [0.997, 0.999, 0.9999])
         gae_lambda = trial.suggest_categorical('gae_lambda', [0.93, 0.95, 0.97])
+        ent_coef = trial.suggest_loguniform('ent_coef', 1e-4, 1e-2)
 
         # Environment setup
         env = make_vec_env(self.problem_name, n_envs=4)
@@ -37,10 +38,12 @@ class Tuning:
                     learning_rate=lr,
                     gamma=gamma,
                     gae_lambda=gae_lambda,
+                    ent_coef=ent_coef,
                     verbose=1)
         model.learn(total_timesteps=STUDY_NUM_TIMESTEPS)
 
         # Evaluate the model
+        # Run until a terminal state is reached
         episode_rewards = []
         for _ in range(STUDY_TRIAL_EPISODES):
             obs = env.reset()
@@ -70,6 +73,7 @@ class Tuning:
         print(f"Auto tuning study with {STUDY_NUM_TRIALS} trials and {STUDY_NUM_TIMESTEPS} time steps.")
         optuna.logging.get_logger("optuna").setLevel(logging.DEBUG)
         study = optuna.create_study(direction='maximize')
+        # The optimize function will run the objective function until the timeout or the number of trials is reached
         study.optimize( self.objective,
                         n_trials=STUDY_NUM_TRIALS,
                         show_progress_bar=STUDY_SHOW_PROGRESS_BAR)

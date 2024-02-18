@@ -68,7 +68,7 @@ GAE_LAMBDA = 0.95
 '''
 The number of interactions with the environment before the policy is updated.
 '''
-# 18/1 18:23
+
 INTERACTIONS_PER_POLICY_UPDATE = 1200
 
 '''
@@ -85,9 +85,16 @@ Was still no better with 1,000,000 timesteps.
 EPOCHS_PER_UPDATE_CYCLE = 4
 
 '''
+The clipping parameter (epsilon) is used in the PPO objective to clip the
+probability ratio. A larger epsilon permits larger policy updates, which
+'''
+CLIP_RANGE = 0.3
+
+'''
 How much experience is collected before learning.
 Those experiences are then sampled into batches. Those batches may in turn be
 samples into smaller batches. This paramater is the mini batch size.
+TODO: try a much larger batch size
 '''
 
 MINI_BATCH_SIZE = 64
@@ -100,9 +107,14 @@ learner = LunarLanderLearning(LEARNING_RATE,
                               EPOCHS_PER_UPDATE_CYCLE,
                               MINI_BATCH_SIZE,
                               INTERACTIONS_PER_POLICY_UPDATE,
+                              CLIP_RANGE,
                               MAX_TIMESTEPS,
                               AUTO_TUNE,
                               PROBLEM_NAME)
 learner.evaluate_model()
+
+'''
+TODO: Queue up a whole load of different parameter sets to try. Record their results separately.
+'''
 
 print("Training finished.")

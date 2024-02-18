@@ -10,7 +10,7 @@ from custom_reward import LunarLanderCustomReward
 class LunarLanderLearning:
     EVAL_EPISODES = 10
     EVAL_ENV_INTERACTION_STEPS = 100000
-    PARALLEL_ENVIRONMENTS = 16
+    PARALLEL_ENVIRONMENTS = 32
     LOG_DIR = "logs/"
     MODEL_SAVE_AS = "ppo_lunarlander"
 
@@ -29,6 +29,7 @@ class LunarLanderLearning:
                  epochs,
                  mini_batch_size,
                  interactions_per_policy_update,
+                 clip_range,
                  max_timesteps,
                  auto_tune,
                  problem_name):
@@ -39,6 +40,7 @@ class LunarLanderLearning:
         self.epochs = epochs
         self.mini_batch_size = mini_batch_size
         self.interactions_per_policy_update = interactions_per_policy_update
+        self.clip_range = clip_range
         self.max_timesteps = max_timesteps
         self.problem_name = problem_name
 
@@ -64,6 +66,7 @@ class LunarLanderLearning:
                             gamma=self.gamma,
                             gae_lambda=self.gae_lambda,
                             ent_coef=self.entropy_coefficient,
+                            clip_range=self.clip_range,
                             verbose=1,
                             tensorboard_log=self.LOG_DIR)
 

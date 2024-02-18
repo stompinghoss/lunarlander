@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/computeInstance.schema.json
+type: computeinstance
+#enter name for the compute
+name: small-compute1
+#enter VM size
+size: Standard_D2_v2
