@@ -104,7 +104,7 @@ task) is reached or until a maximum number of steps per episode is exceeded.
 
 EVAL_EPISODES = 10
 EVAL_ENV_INTERACTION_STEPS = 100000
-PARALLEL_ENVIRONMENTS = 16
+PARALLEL_ENVIRONMENTS = 32
 LOG_DIR = "logs/"
 
 

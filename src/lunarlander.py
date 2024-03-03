@@ -25,7 +25,7 @@ LEARNING_RATE = 0.0003
  from the environment.
 '''
 
-MAX_TIMESTEPS = 2000000
+MAX_TIMESTEPS = 2e6
 
 # Utilise an approach to calculate good hyper parameters
 AUTO_TUNE = False
@@ -35,7 +35,7 @@ The entropy coefficient scales the entropy in the policy loss function which
 if increased, rewards higher randomness of actions taken.
 '''
 
-ENTROPY_COEFFICIENT = 0.1
+ENTROPY_COEFFICIENT = 0.01
 
 '''
 *Drives long term gain*
@@ -43,7 +43,7 @@ Gamma (aka discount factor) is the discount factor which is between 0 and 1.
 Higher means favour long term rewards.
 '''
 
-DISCOUNT_FACTOR = 0.999
+DISCOUNT_FACTOR = 0.99
 
 '''
 * Drives exploration vs exploitation *
@@ -69,7 +69,7 @@ GAE_LAMBDA = 0.95
 The number of interactions with the environment before the policy is updated.
 '''
 
-INTERACTIONS_PER_POLICY_UPDATE = 1200
+INTERACTIONS_PER_POLICY_UPDATE = 2048
 
 '''
 Interations with the environment are built into experiences which are batched.
@@ -82,19 +82,18 @@ those scenarios were at 100,000 timesteps
 Was still no better with 1,000,000 timesteps.
 '''
 
-EPOCHS_PER_UPDATE_CYCLE = 4
+EPOCHS_PER_UPDATE_CYCLE = 10
 
 '''
 The clipping parameter (epsilon) is used in the PPO objective to clip the
 probability ratio. A larger epsilon permits larger policy updates, which
 '''
-CLIP_RANGE = 0.3
+CLIP_RANGE = 0.2
 
 '''
 How much experience is collected before learning.
 Those experiences are then sampled into batches. Those batches may in turn be
 samples into smaller batches. This paramater is the mini batch size.
-TODO: try a much larger batch size
 '''
 
 MINI_BATCH_SIZE = 64
@@ -112,9 +111,5 @@ learner = LunarLanderLearning(LEARNING_RATE,
                               AUTO_TUNE,
                               PROBLEM_NAME)
 learner.evaluate_model()
-
-'''
-TODO: Queue up a whole load of different parameter sets to try. Record their results separately.
-'''
 
 print("Training finished.")

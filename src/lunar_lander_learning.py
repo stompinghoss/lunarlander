@@ -1,25 +1,23 @@
 from auto_tune import Tuning
+from custom_reward import LunarLanderCustomReward
 import os
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3 import PPO
-from custom_reward import LunarLanderCustomReward
+from stable_baselines3 import PPO, A2C
+from stable_baselines3.common.vec_env import VecNormalize
 
 
 class LunarLanderLearning:
     EVAL_EPISODES = 10
-    EVAL_ENV_INTERACTION_STEPS = 100000
-    PARALLEL_ENVIRONMENTS = 32
+    PARALLEL_ENVIRONMENTS = 4
     LOG_DIR = "logs/"
-    MODEL_SAVE_AS = "ppo_lunarlander"
-
-    '''
-    * Drives exploration vs exploitation *
-    For each update, this many steps are run, generating n steps of experiences
-    from the environment.
-    In a vectorized environment, this many steps will be taken per environment.
-    '''
+    RL_ALGORITHM = "PPO"
+    MODEL_SAVE_AS = RL_ALGORITHM + "_lunarlander"
+    POLICY = "MlpPolicy"
+    NORMALISE_OBSERVATIONS = True
+    VERBOSITY = 1
+    DEVICE = "cpu"
 
     def __init__(self,
                  learning_rate,
@@ -51,24 +49,44 @@ class LunarLanderLearning:
         self.build_model()
 
     def build_model(self):
-        print("Building model")
         print("Initialising gymnasium environment")
-        wrapped_env = make_vec_env( self.problem_name,
-                                    n_envs=self.PARALLEL_ENVIRONMENTS,
-                                    wrapper_class=LunarLanderCustomReward)
+        wrapped_env = make_vec_env(
+            self.problem_name,
+            n_envs=self.PARALLEL_ENVIRONMENTS,
+            wrapper_class=LunarLanderCustomReward
+        )
 
-        # Leave learning rate to the default-- for now.
-        self.model = PPO(   policy='MlpPolicy',
-                            env=wrapped_env,
-                            n_steps=self.interactions_per_policy_update,
-                            batch_size=self.mini_batch_size,
-                            n_epochs=self.epochs,
-                            gamma=self.gamma,
-                            gae_lambda=self.gae_lambda,
-                            ent_coef=self.entropy_coefficient,
-                            clip_range=self.clip_range,
-                            verbose=1,
-                            tensorboard_log=self.LOG_DIR)
+        print(f"Log directory: {self.LOG_DIR}")
+        print(f"Verbose: {self.VERBOSITY}")
+
+        # Normalize observations
+        if self.NORMALISE_OBSERVATIONS:
+            print("Normalising observations")
+            wrapped_env = VecNormalize(wrapped_env, norm_obs=True)
+
+        print(f"Building model with algorithm {self.RL_ALGORITHM} and policy {self.POLICY}")
+        if self.RL_ALGORITHM == "PPO":
+            print(f"Learning rate: {self.lr}\nGamma: {self.gamma}\nGAE Lambda: {self.gae_lambda}\nEntropy Coefficient: {self.entropy_coefficient}\nEpochs: {self.epochs}\nMini Batch Size: {self.mini_batch_size}\nInteractions per Policy Update: {self.interactions_per_policy_update}\nClip Range: {self.clip_range}\nVerbose: 1")
+            self.model = PPO(
+                policy=self.POLICY,
+                env=wrapped_env,
+                n_steps=self.interactions_per_policy_update,
+                batch_size=self.mini_batch_size,
+                n_epochs=self.epochs,
+                gamma=self.gamma,
+                gae_lambda=self.gae_lambda,
+                ent_coef=self.entropy_coefficient,
+                clip_range=self.clip_range,
+                verbose=self.VERBOSITY,
+                tensorboard_log=self.LOG_DIR
+            )
+        elif self.RL_ALGORITHM == "A2C":
+            print("Everything default")
+            self.model = A2C(   policy=self.POLICY,
+                                env=wrapped_env,
+                                device=self.DEVICE,
+                                verbose=self.VERBOSITY,
+                                tensorboard_log=self.LOG_DIR)
 
         # Set the logger
         self.model.set_logger(self.logger)
