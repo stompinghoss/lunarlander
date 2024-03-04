@@ -18,6 +18,8 @@ class LunarLanderLearning:
     NORMALISE_OBSERVATIONS = True
     VERBOSITY = 1
     DEVICE = "cpu"
+    H1_SIZE = 128
+    H2_SIZE = 128
 
     def __init__(self,
                  learning_rate,
@@ -65,6 +67,13 @@ class LunarLanderLearning:
             wrapped_env = VecNormalize(wrapped_env, norm_obs=True)
 
         print(f"Building model with algorithm {self.RL_ALGORITHM} and policy {self.POLICY}")
+        print(f"Log directory: {self.LOG_DIR}")
+        print(f"Verbose: {self.VERBOSITY}")
+
+        policy_kwargs = dict(
+            net_arch=[self.H1_SIZE, self.H2_SIZE],  # Specify the sizes of the hidden layers here
+        )
+
         if self.RL_ALGORITHM == "PPO":
             print(f"Learning rate: {self.lr}\nGamma: {self.gamma}\nGAE Lambda: {self.gae_lambda}\nEntropy Coefficient: {self.entropy_coefficient}\nEpochs: {self.epochs}\nMini Batch Size: {self.mini_batch_size}\nInteractions per Policy Update: {self.interactions_per_policy_update}\nClip Range: {self.clip_range}\nVerbose: 1")
             self.model = PPO(
@@ -78,7 +87,8 @@ class LunarLanderLearning:
                 ent_coef=self.entropy_coefficient,
                 clip_range=self.clip_range,
                 verbose=self.VERBOSITY,
-                tensorboard_log=self.LOG_DIR
+                tensorboard_log=self.LOG_DIR,
+                policy_kwargs=policy_kwargs  # Pass the policy_kwargs parameter
             )
         elif self.RL_ALGORITHM == "A2C":
             print("Everything default")
@@ -92,7 +102,11 @@ class LunarLanderLearning:
         self.model.set_logger(self.logger)
 
         print("Learning")
+        print("Model actor architecture:")
+        print(self.model.policy)
         self.model.learn(total_timesteps=self.max_timesteps)
+        print("Model critic architecture:")
+        print(self.model.policy.critic)
 
         # Save the trained model
         print("Saving model")
