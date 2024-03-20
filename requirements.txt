@@ -17,7 +17,7 @@ auto_gpt_plugin_template @ git+https://github.com/Significant-Gravitas/Auto-GPT-
 autoflake==2.2.1
 Babel==2.13.0
 beautifulsoup4==4.12.2
-black==23.9.1
+black==24.3.0
 blinker==1.6.3
 blis==0.7.11
 box2d-py==2.3.8
