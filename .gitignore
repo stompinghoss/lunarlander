@@ -7,3 +7,5 @@ dockerlog
 *.zip
 compute.yml
 azureml-1.yml
+evaluation_results.txt
+conda.yml
