@@ -1,11 +1,11 @@
 .venv/
 logs/
 src/__pycache__/
-.DS_store
+.DS_Store
 Dockerfile
 dockerlog
 *.zip
 compute.yml
 azureml-1.yml
 evaluation_results.txt
-conda.yml
+conda.yaml
