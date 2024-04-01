@@ -53,8 +53,8 @@ class Tuning:
             total_rewards = [0] * env.num_envs
 
             while not all(dones):
-                if time.time() - start_time > STUDY_TRIAL_TIMEOUT:
-                    raise optuna.exceptions.TrialPruned("Trial exceeded time.")
+                #if time.time() - start_time > STUDY_TRIAL_TIMEOUT:
+                #    raise optuna.exceptions.TrialPruned("Trial exceeded time.")
 
                 action, _states = model.predict(obs, deterministic=True)
                 obs, rewards, dones, info = env.step(action)

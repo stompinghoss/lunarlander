@@ -1,13 +1,5 @@
 import gymnasium as gym
 
-'''
-For reward shaping, we want to reward:
-Minimal engine use. Main engines penalised more than side engines.
-Coming in under gravity.
-Not firing the engines once in contact with the ground.
-v5.2: added horizontal alignment reward - didn't help. Made slightly worse.
-'''
-
 
 class LunarLanderCustomReward(gym.Wrapper):
     def __init__(self, env):
@@ -23,32 +15,15 @@ class LunarLanderCustomReward(gym.Wrapper):
         MAIN_ENGINE = 2
         LEFT_ENGINE = 1
         RIGHT_ENGINE = 3
-        # ANGLE = 4
 
         # Engine use penalty when on ground
         GROUND_ENGINE_USE_PENALTY = -0.4
         MAIN_ENGINE_USE_PENALTY = -0.6
         SIDE_ENGINE_USE_PENALTY = -0.06
-        EFFICIENT_DESCENT_REWARD = 0.4
-
-        '''
-        ANGLE_THRESHOLD = 0.1  # Adjust as needed, smaller values mean stricter control
-        HORIZONTAL_ALIGNMENT_REWARD = 0.1
-        ANGLE_PENALTY = -0.1  # Adjust as needed
-
-        # Reward keeping the craft horizontal
-        lander_angle = state[ANGLE]
-
-        if abs(lander_angle) < ANGLE_THRESHOLD:
-            reward += HORIZONTAL_ALIGNMENT_REWARD
-        else:
-            # Apply penalty based on how much the angle deviates from horizontal
-            reward += ANGLE_PENALTY * abs(lander_angle)
-        '''
+        EFFICIENT_DESCENT_REWARD = 0.2
 
         # Check if either leg is in contact with the ground
-        ground_contact = (state[LEFT_LEG_GROUND_CONTACT] or
-                          state[RIGHT_LEG_GROUND_CONTACT])
+        ground_contact = state[LEFT_LEG_GROUND_CONTACT] or state[RIGHT_LEG_GROUND_CONTACT]
         side_engine_use = action == LEFT_ENGINE or action == RIGHT_ENGINE
 
         # Main engine costs more than side engines
@@ -58,12 +33,12 @@ class LunarLanderCustomReward(gym.Wrapper):
         if side_engine_use:
             reward += SIDE_ENGINE_USE_PENALTY
 
-        # Positive reward if the lander is descending (vertical velocity < 0)
-        # under gravity and without engines
+        # Reward for efficient descent (using gravity)
+        # Positive reward if the lander is descending (vertical velocity < 0) efficiently
         if state[VERTICAL_VELOCITY] < 0:
             reward += EFFICIENT_DESCENT_REWARD
 
-        # Penalize if engines are fired while one or both legs on the ground
+        # Penalize if engines are fired while on ground
         if ground_contact and action == MAIN_ENGINE or side_engine_use:
             reward += GROUND_ENGINE_USE_PENALTY
 
