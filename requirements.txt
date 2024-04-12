@@ -85,7 +85,7 @@ httpx==0.24.1
 hypercorn==0.14.4
 hyperframe==6.0.1
 identify==2.5.30
-idna==3.4
+idna==3.7
 importlib-resources==6.1.1
 inflection==0.5.1
 iniconfig==2.0.0
