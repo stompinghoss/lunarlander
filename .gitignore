@@ -2,6 +2,7 @@
 logs/
 src/__pycache__/
 .DS_Store
+src/.DS_Store
 Dockerfile
 dockerlog
 *.zip
