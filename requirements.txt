@@ -223,7 +223,7 @@ thinc==8.1.12
 tiktoken==0.3.3
 tomli==2.0.1
 torch==2.1.2
-tqdm==4.66.1
+tqdm==4.66.3
 traitlets==5.14.0
 trio==0.22.2
 trio-websocket==0.11.1
